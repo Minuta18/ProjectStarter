@@ -15,21 +15,22 @@ class ArgParser:
 
 			for arg in self._search_args.keys():
 				for i, a in enumerate(args):
-					print(a, arg)
 					if a == arg:
 						result[a] = True
 						args.pop(i)
+						break
 				else:
 					result[arg] = False
-     
+
+
 			for kwarg in self._search_kwargs.keys():
 				for i, arg in enumerate(args):
 					if arg == kwarg:
 						if not args[i + 1].startswith('-'):
 							result[arg] = arg[i + 1]
+							break
 						else:
 							raise ValueError('Unable to parse argument')
-						break
 				else:
 					result[kwarg] = self._search_kwargs[kwarg]
      

@@ -77,6 +77,8 @@ The structure of application will look like this:
                 print(self.version())
             elif data['-h'] or data['--help']:
                 print(self.help())
+            else:
+                print(self.help())
         except ValueError:
             print(self.help())
             sys.exit(2)
