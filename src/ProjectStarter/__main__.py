@@ -12,17 +12,29 @@ This is a script to make porject creation and development faster
 '''
 
 import sys
+import Command
+import ArgsParser
 
-def print_help():
-    print('''Usage: ProjectStarter <SUBCOMMAND> [OPTIONS]
+class ProjectStarter(Command.Command):
+    def __init__(self):
+        self.errors = {
+            ...
+        }
+
+    def help(self):
+        return '''Usage: ProjectStarter [PARAMS] <SUBCOMMAND>
 
 This is a script to make porject creation and development faster. Uses PyProject.toml
 
 Available subcommands:
     init                Create a new PyProject.toml and initialize the project in the current directory
-    create <object>     Creates a new object (like service or application) in the current project
+    create <object>     Creates a serive or application in the current project
           
-The structure of application is looking like this:
+Available Options:
+    -h, --help          Show this help message
+    -v, --version       Show version
+
+The structure of application will look like this:
     +-project  <- Main entrypoint of the project
       +-service1  <- Service - web resource which uses only one ip address
       +-service2
@@ -46,7 +58,29 @@ The structure of application is looking like this:
           +-views.py             <- Endpoints of the application
           +-tests.py             <- Tests
           +-conftests.py         <- Test configurations (It will create automatically if your application is asyncronous and you 
-                                    are using PyTest)''')
+                                    are using PyTest)'''
+
+    def version(self):
+        return 'version 0.0.2'
+    
+    def run(self, args):
+        try:
+            parser = ArgsParser.ArgParser()
+            parser.search_arg('-v', is_flag=True)
+            parser.search_arg('--version', is_flag=True)
+            parser.search_arg('-h', is_flag=True)
+            parser.search_arg('--help', is_flag=True)
+            
+            data = parser.parse(args)
+            
+            if data['-v'] or data['--version']:
+                print(self.version())
+            elif data['-h'] or data['--help']:
+                print(self.help())
+        except ValueError:
+            print(self.help())
+            sys.exit(2)
 
 if __name__ == '__main__':
-    print_help()
+    projectStarter = ProjectStarter()
+    projectStarter.run(sys.argv[1:])
