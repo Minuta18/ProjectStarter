@@ -3,14 +3,27 @@ class ArgParser:
 		self._search_args = dict()
 		self._search_kwargs = dict()
 	
-	def search_arg(self, arg: str = ..., is_flag: bool = False, default_value = None):
+	def search_arg(self, arg: str = ..., type = str, is_flag: bool = False, default_value = None):
 		if is_flag:
 			self._search_args[arg] = False
 		else:
 			self._search_kwargs[arg] = default_value
 
-	def parse(self, args: list[str] = ...) -> dict:
+	def parse(self, given_args: list[str] = ...) -> dict:
+		'''
+		Converts command line arguments in dictionary.
+		Example:
+  
+		my_command something --do-nothing --int 1
+  
+		{
+			'--do-nothing': True,
+			'--int': 1,
+		}
+		'''
+
 		try:
+			args = given_args[:]
 			result = dict()
 
 			for arg in self._search_args.keys():
@@ -34,6 +47,6 @@ class ArgParser:
 				else:
 					result[kwarg] = self._search_kwargs[kwarg]
      
-			return result
+			return result, args
 		except IndexError:
 			raise ValueError('Unable to parse arguments')

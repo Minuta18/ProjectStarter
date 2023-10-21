@@ -22,7 +22,7 @@ class ProjectStarter(Command.Command):
         }
 
     def help(self):
-        return '''Usage: ProjectStarter [PARAMS] <SUBCOMMAND>
+        return '''Usage: ProjectStarter <SUBCOMMAND> [PARAMS]
 
 This is a script to make porject creation and development faster. Uses PyProject.toml
 
@@ -71,14 +71,21 @@ The structure of application will look like this:
             parser.search_arg('-h', is_flag=True)
             parser.search_arg('--help', is_flag=True)
             
-            data = parser.parse(args)
+            data, unparsed = parser.parse(args)
+            
+            if len(unparsed) > 0:
+                if unparsed[0] == 'init':
+                    ...
             
             if data['-v'] or data['--version']:
                 print(self.version())
+                sys.exit(0)
             elif data['-h'] or data['--help']:
                 print(self.help())
+                sys.exit(0)
             else:
                 print(self.help())
+                sys.exit(0)
         except ValueError:
             print(self.help())
             sys.exit(2)
