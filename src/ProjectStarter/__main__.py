@@ -14,6 +14,7 @@ This is a script to make porject creation and development faster
 import sys
 import Command
 import ArgsParser
+import InitCommand
 
 class ProjectStarter(Command.Command):
     def __init__(self):
@@ -63,7 +64,7 @@ The structure of application will look like this:
     def version(self):
         return 'version 0.0.2'
     
-    def run(self, args):
+    def run(self, args: list[str]):
         try:
             parser = ArgsParser.ArgParser()
             parser.search_arg('-v', is_flag=True)
@@ -75,7 +76,8 @@ The structure of application will look like this:
             
             if len(unparsed) > 0:
                 if unparsed[0] == 'init':
-                    ...
+                    InitCommand_ = InitCommand.InitCommand()
+                    InitCommand_.run(unparsed[1:])
             
             if data['-v'] or data['--version']:
                 print(self.version())

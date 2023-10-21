@@ -1,0 +1,4 @@
+[project-starter]
+project-name = "{{ project_name }}"
+project-version = "{{ project_version }}"
+services = [{% for service in project_services %}"service", {% endfor %}]
